@@ -1,5 +1,6 @@
 params.reads          = "reads.csv"
 params.reference      = "reference.fa"
+params.vcf            = "variants.vcf"
 params.out            = "out"
 
 process preprocess {
