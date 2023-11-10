@@ -25,19 +25,18 @@ process preprocess {
 process pangenie {
   cpus 20
   memory "90G"
-  time "3h"
+  time "6h"
   publishDir "${params.out}/genotypes", mode: 'copy'
 
   input:
   tuple val(sample_name), path(sample_bam), path(ref), path("index/")
 
   output:
-  path("${sample_name}_genotyping.vcf.gz*")
+  path("${sample_name}_genotyping.vcf*")
 
   script:
   """
   PanGenie -t 20 -j 20 -s ${sample_name} -i <(samtools fastq ${sample_bam}) -f index/index/processed -o ${sample_name}
-  bgzip ${sample_name}_genotyping.vcf
   """
 }
 
