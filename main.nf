@@ -36,7 +36,7 @@ process pangenie {
 
   script:
   """
-  PanGenie -t 40 -j 40 -s ${sample_name} -i <(samtools fastq ${sample_bam}) -r ${ref} -f index/processed -o ${sample_name}
+  PanGenie -t 40 -j 40 -s ${sample_name} -i <(samtools fastq ${sample_bam}) -f index/processed -o ${sample_name}
   bgzip ${sample_name}_genotyping.vcf
   """
 }
