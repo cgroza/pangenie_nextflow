@@ -23,8 +23,8 @@ process preprocess {
 }
 
 process pangenie {
-  cpus 40
-  memory "180G"
+  cpus 20
+  memory "90G"
   time "3h"
   publishDir "${params.out}/genotypes", mode: 'copy'
 
@@ -36,7 +36,7 @@ process pangenie {
 
   script:
   """
-  PanGenie -t 40 -j 40 -s ${sample_name} -i <(samtools fastq ${sample_bam}) -f index/index/processed -o ${sample_name}
+  PanGenie -t 20 -j 20 -s ${sample_name} -i <(samtools fastq ${sample_bam}) -f index/index/processed -o ${sample_name}
   bgzip ${sample_name}_genotyping.vcf
   """
 }
@@ -44,7 +44,7 @@ process pangenie {
 workflow {
   // initiate channels that will provide the reference genome to processes
   Channel.fromPath(params.reference).set{ref_ch}
-  Channel.fromPath(params.reads).splitCsv(header:true).map{row -> [row.sample, file(row.path, checkIfExists:true)]}.set{reads_ch}
+  Channel.fromPath(params.reads).splitCsv(header:true).map{row -> [row.sample, file(row.path, checkIfExists:false)]}.set{reads_ch}
 
   Channel.fromPath(params.vcf).set{vcf_ch}
 
