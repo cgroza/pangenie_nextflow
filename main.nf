@@ -32,16 +32,16 @@ process pangenie {
   tuple val(sample_name), path(sample_bam), path(ref), path("index/")
 
   output:
-  path("${sample_name}_genotyping.vcf*")
+  path("${sample_name}_genotyping.vcf.gz")
 
   script:
   """
   PanGenie -t 20 -j 20 -s ${sample_name} -i <(samtools fastq ${sample_bam}) -f index/index/processed -o ${sample_name}
+  bgzip ${sample_name}_genotyping.vcf
   """
 }
 
 workflow {
-  // initiate channels that will provide the reference genome to processes
   Channel.fromPath(params.reference).set{ref_ch}
   Channel.fromPath(params.reads).splitCsv(header:true).map{row -> [row.sample, file(row.path, checkIfExists:false)]}.set{reads_ch}
 
